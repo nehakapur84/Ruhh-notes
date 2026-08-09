@@ -102,6 +102,7 @@ h1,h2,h3,h4{
 }
 
 .section-heading h2{font-size:32px}
+
 .section-heading p{
   margin-top:4px;
   color:var(--soft);
@@ -124,6 +125,7 @@ h1,h2,h3,h4{
 }
 
 .subject-card:hover{transform:translateY(-4px)}
+
 .subject-card:active{
   transform:translateY(2px);
   box-shadow:0 2px 0 var(--ink);
@@ -150,6 +152,11 @@ h1,h2,h3,h4{
 .history{background:#F4EEFF}
 .geography{background:#EAF9F1}
 
+/* NEW GEOGRAPHY OPTIONS */
+.aishwarya{background:#FFE8F0}
+.primula{background:#E8FFF4}
+.student{background:#FFF2D4}
+
 .backbar{
   display:flex;
   align-items:center;
@@ -174,7 +181,11 @@ h1,h2,h3,h4{
 }
 
 .panel h2{font-size:28px}
-.sub{color:var(--soft);margin-top:3px}
+
+.sub{
+  color:var(--soft);
+  margin-top:3px;
+}
 
 textarea{
   width:100%;
@@ -318,6 +329,7 @@ textarea:focus{
 }
 
 .pdf-btn{background:var(--coral)}
+
 .print-btn{
   background:var(--blue);
   color:white;
@@ -591,6 +603,41 @@ footer{
 
 </section>
 
+<!-- NEW GEOGRAPHY OPTIONS SCREEN -->
+
+<section class="screen" id="screenGeographyOptions">
+
+  <div class="backbar">
+    <button class="back-btn" id="backFromGeographyOptions">⬅ Back</button>
+    <span>Social Studies → Geography</span>
+  </div>
+
+  <div class="section-heading">
+    <h2>🗺️ Geography</h2>
+    <p>Choose an option to start studying.</p>
+  </div>
+
+  <div class="subject-grid">
+
+    <div class="subject-card aishwarya" data-geooption="Aishwarya">
+      <span class="icon">🌸</span>
+      <span class="label">Aishwarya</span>
+    </div>
+
+    <div class="subject-card primula" data-geooption="Primula">
+      <span class="icon">🌿</span>
+      <span class="label">Primula</span>
+    </div>
+
+    <div class="subject-card student" data-geooption="Student">
+      <span class="icon">🎓</span>
+      <span class="label">Student</span>
+    </div>
+
+  </div>
+
+</section>
+
 <section class="screen" id="screenWorkspace">
 
   <div class="backbar">
@@ -671,10 +718,6 @@ footer{
 
 <script>
 
-/* ================================
-   STATE
-================================ */
-
 let navigation = {
   subject:null,
   subSubject:null
@@ -692,17 +735,11 @@ let quiz = {
   answered:false
 };
 
-
-/* ================================
-   HELPERS
-================================ */
-
 const $ = selector =>
   document.querySelector(selector);
 
 const $$ = selector =>
   Array.from(document.querySelectorAll(selector));
-
 
 function escapeHTML(value){
 
@@ -715,7 +752,6 @@ function escapeHTML(value){
 
 }
 
-
 function formatText(value){
 
   return escapeHTML(value)
@@ -725,7 +761,6 @@ function formatText(value){
     );
 
 }
-
 
 function showScreen(id){
 
@@ -742,7 +777,6 @@ function showScreen(id){
 
 }
 
-
 function showError(message){
 
   $("#inputError").textContent = message;
@@ -752,7 +786,7 @@ function showError(message){
 
 
 /* ================================
-   NAVIGATION
+   MAIN SUBJECT NAVIGATION
 ================================ */
 
 $$(".subject-card[data-subject]")
@@ -781,14 +815,52 @@ $$(".subject-card[data-subject]")
 });
 
 
+/* ================================
+   HISTORY / GEOGRAPHY
+================================ */
+
 $$(".subject-card[data-subsubject]")
+.forEach(card => {
+
+  card.addEventListener("click",() => {
+
+    const subSubject =
+      card.dataset.subsubject;
+
+    if(subSubject === "Geography"){
+
+      navigation.subject = "Social Studies";
+      navigation.subSubject = "Geography";
+
+      showScreen("screenGeographyOptions");
+
+    }else{
+
+      enterWorkspace(
+        "Social Studies",
+        subSubject
+      );
+
+    }
+
+  });
+
+});
+
+
+/* ================================
+   NEW GEOGRAPHY OPTIONS
+================================ */
+
+$$(".subject-card[data-geooption]")
 .forEach(card => {
 
   card.addEventListener("click",() => {
 
     enterWorkspace(
       "Social Studies",
-      card.dataset.subsubject
+      "Geography — " +
+      card.dataset.geooption
     );
 
   });
@@ -804,10 +876,26 @@ $("#backFromSubSub")
 });
 
 
+$("#backFromGeographyOptions")
+.addEventListener("click",() => {
+
+  showScreen("screenSubSub");
+
+});
+
+
 $("#backFromWorkspace")
 .addEventListener("click",() => {
 
-  if(navigation.subject === "Social Studies"){
+  if(
+    navigation.subject === "Social Studies" &&
+    navigation.subSubject &&
+    navigation.subSubject.startsWith("Geography")
+  ){
+
+    showScreen("screenGeographyOptions");
+
+  }else if(navigation.subject === "Social Studies"){
 
     showScreen("screenSubSub");
 
@@ -850,7 +938,8 @@ function enterWorkspace(subject,subSubject){
   $("#workspaceTitle").textContent =
     "📥 " + title + ": Add your study material";
 
-  $("#workspaceCrumb").textContent = title;
+  $("#workspaceCrumb").textContent =
+    title;
 
   showScreen("screenWorkspace");
 
@@ -903,7 +992,8 @@ $("#fileInput")
       const text =
         await extractPDF(file);
 
-      $("#rawText").value = text;
+      $("#rawText").value =
+        text;
 
     }else{
 
@@ -1060,7 +1150,8 @@ function startTool(tool){
 
   });
 
-  $("#resultWrap").style.display = "block";
+  $("#resultWrap").style.display =
+    "block";
 
   generateTool(tool,text);
 
@@ -1170,20 +1261,11 @@ function renderActions(tool){
 
   `;
 
-
-  /*
-    IMPORTANT:
-    Download PDF now uses the browser's
-    own Print → Save as PDF system.
-    This avoids the blank-PDF problem.
-  */
-
   $("#downloadPDF")
     .addEventListener(
       "click",
       () => printResult()
     );
-
 
   $("#printButton")
     .addEventListener(
@@ -1239,7 +1321,6 @@ function renderAdvanced(){
 
   `;
 
-
   (data.sections || [])
   .forEach(section => {
 
@@ -1257,7 +1338,6 @@ function renderAdvanced(){
 
     `;
 
-
     (section.points || [])
     .forEach(point => {
 
@@ -1271,9 +1351,7 @@ function renderAdvanced(){
 
     });
 
-
     html += `</ul>`;
-
 
     if(
       section.table &&
@@ -1334,7 +1412,6 @@ function renderAdvanced(){
 
     }
 
-
     if(section.mnemonic){
 
       html += `
@@ -1356,7 +1433,6 @@ function renderAdvanced(){
     html += `</div>`;
 
   });
-
 
   if(
     data.difficultWords &&
@@ -1396,7 +1472,6 @@ function renderAdvanced(){
     html += `</div>`;
 
   }
-
 
   if(
     data.pictographicRevision &&
@@ -1462,7 +1537,6 @@ function renderAdvanced(){
 
   }
 
-
   $("#resultArea").innerHTML =
     html;
 
@@ -1526,7 +1600,6 @@ function drawQuestion(){
 
   }
 
-
   const question =
     questions[quiz.index];
 
@@ -1554,7 +1627,6 @@ function drawQuestion(){
 
   `;
 
-
   (question.options || [])
   .forEach((option,index) => {
 
@@ -1571,7 +1643,6 @@ function drawQuestion(){
     `;
 
   });
-
 
   html += `
 
@@ -1591,10 +1662,8 @@ function drawQuestion(){
 
   `;
 
-
   $("#resultArea").innerHTML =
     html;
-
 
   $$(".quiz-opt")
   .forEach(button => {
@@ -1617,7 +1686,6 @@ function drawQuestion(){
                 option ===
                 question.answer
             );
-
 
         $$(".quiz-opt")
         .forEach((btn,index) => {
@@ -1643,11 +1711,9 @@ function drawQuestion(){
 
         });
 
-
         if(selected === correct){
           quiz.score++;
         }
-
 
         if(question.explanation){
 
@@ -1667,7 +1733,6 @@ function drawQuestion(){
 
         }
 
-
         $("#nextQuestion")
           .style.display =
           "inline-block";
@@ -1676,7 +1741,6 @@ function drawQuestion(){
     );
 
   });
-
 
   $("#nextQuestion")
     .addEventListener(
@@ -1731,7 +1795,6 @@ function renderBrief(){
 
   `;
 
-
   (data.points || [])
   .forEach(point => {
 
@@ -1745,7 +1808,6 @@ function renderBrief(){
 
   });
 
-
   html += `</ul>`;
 
   $("#resultArea").innerHTML =
@@ -1755,7 +1817,7 @@ function renderBrief(){
 
 
 /* ================================
-   PRINT / SAVE AS PDF
+   PRINT / PDF
 ================================ */
 
 function printResult(){
@@ -1772,13 +1834,11 @@ function printResult(){
       : "RUHH NOTES — " +
         navigation.subject;
 
-
   const printWindow =
     window.open(
       "",
       "_blank"
     );
-
 
   if(!printWindow){
 
@@ -1790,9 +1850,7 @@ function printResult(){
 
   }
 
-
   printWindow.document.open();
-
 
   printWindow.document.write(`
 
@@ -1960,14 +2018,7 @@ function printResult(){
 
   `);
 
-
   printWindow.document.close();
-
-
-  /*
-    Wait for the new window to finish loading,
-    then open Chrome's print dialog.
-  */
 
   setTimeout(() => {
 
