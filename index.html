@@ -1,0 +1,1985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>RUHH NOTES</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+<style>
+:root{
+  --paper:#FFF9EE;
+  --paper2:#FCF2DA;
+  --ink:#242046;
+  --soft:#5C587D;
+  --coral:#FF6B6B;
+  --coralDark:#E14F4F;
+  --yellow:#FFC93C;
+  --blue:#3F8CFF;
+  --blueDark:#2C6FE0;
+  --green:#3DBE7C;
+  --purple:#9B6BFF;
+  --teal:#2BB8A3;
+  --line:#E9DCB8;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  color:var(--ink);
+  font-family:'Nunito',sans-serif;
+  font-size:17px;
+  line-height:1.55;
+  min-height:100vh;
+  background:
+    repeating-linear-gradient(
+      var(--paper) 0px,
+      var(--paper) 34px,
+      var(--line) 35px
+    );
+}
+
+button,textarea,input{font-family:'Nunito',sans-serif}
+button{cursor:pointer}
+
+h1,h2,h3,h4{
+  font-family:'Baloo 2',cursive;
+  margin:0;
+}
+
+.wrap{
+  max-width:1050px;
+  margin:auto;
+  padding:0 20px 50px;
+}
+
+.screen{display:none}
+.screen.active{display:block}
+
+.cover{
+  background:var(--ink);
+  color:white;
+  border-radius:0 0 30px 30px;
+  padding:42px 20px 45px;
+  margin-bottom:35px;
+  text-align:center;
+}
+
+.logo{
+  display:inline-block;
+  padding:7px 18px;
+  border-radius:999px;
+  background:var(--yellow);
+  color:var(--ink);
+  font-family:'Space Mono';
+  font-size:12px;
+  font-weight:bold;
+}
+
+.cover h1{
+  margin-top:12px;
+  font-size:clamp(45px,8vw,70px);
+  line-height:1;
+}
+
+.cover h1 span{color:var(--coral)}
+
+.cover p{
+  max-width:680px;
+  margin:14px auto 0;
+  color:#D2CFEA;
+}
+
+.section-heading{
+  text-align:center;
+  margin-bottom:25px;
+}
+
+.section-heading h2{font-size:32px}
+.section-heading p{
+  margin-top:4px;
+  color:var(--soft);
+}
+
+.subject-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+
+.subject-card{
+  border:3px solid var(--ink);
+  border-radius:18px;
+  padding:28px 15px;
+  text-align:center;
+  box-shadow:0 5px 0 var(--ink);
+  transition:.15s;
+  cursor:pointer;
+}
+
+.subject-card:hover{transform:translateY(-4px)}
+.subject-card:active{
+  transform:translateY(2px);
+  box-shadow:0 2px 0 var(--ink);
+}
+
+.subject-card .icon{
+  display:block;
+  font-size:45px;
+  margin-bottom:7px;
+}
+
+.subject-card .label{
+  font-family:'Baloo 2';
+  font-weight:800;
+  font-size:21px;
+}
+
+.science{background:#EAF9F1}
+.maths{background:#EAF2FF}
+.social{background:#FFEDED}
+.english{background:#F4EEFF}
+.hindi{background:#FFF7E3}
+.marathi{background:#E6FBF8}
+.history{background:#F4EEFF}
+.geography{background:#EAF9F1}
+
+.backbar{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.back-btn{
+  background:white;
+  border:2px solid var(--ink);
+  border-radius:10px;
+  padding:8px 15px;
+  font-weight:800;
+}
+
+.panel{
+  background:white;
+  border:3px solid var(--ink);
+  border-radius:18px;
+  padding:25px;
+  box-shadow:0 4px 0 rgba(36,32,70,.12);
+}
+
+.panel h2{font-size:28px}
+.sub{color:var(--soft);margin-top:3px}
+
+textarea{
+  width:100%;
+  min-height:210px;
+  margin-top:16px;
+  padding:16px;
+  border:2px dashed var(--line);
+  border-radius:13px;
+  background:var(--paper2);
+  font-size:16px;
+  resize:vertical;
+}
+
+textarea:focus{
+  outline:3px solid var(--blue);
+  background:white;
+}
+
+.upload-row{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:13px;
+}
+
+.file-btn{
+  background:var(--paper2);
+  border:2px solid var(--ink);
+  border-radius:10px;
+  padding:9px 15px;
+  font-weight:800;
+}
+
+#fileInput{display:none}
+
+#fileName{
+  color:var(--soft);
+  font-size:13px;
+}
+
+.char-count{
+  margin-left:auto;
+  font-family:'Space Mono';
+  font-size:12px;
+  color:var(--soft);
+}
+
+.error{
+  color:var(--coralDark);
+  font-weight:800;
+  margin-top:10px;
+}
+
+.tool-row{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+  margin-top:22px;
+}
+
+.tool-card{
+  background:white;
+  border:3px solid var(--ink);
+  border-radius:16px;
+  padding:20px 10px;
+  text-align:center;
+  box-shadow:0 4px 0 var(--ink);
+  transition:.15s;
+}
+
+.tool-card:hover{transform:translateY(-3px)}
+
+.tool-card .num{
+  display:block;
+  width:29px;
+  height:29px;
+  line-height:29px;
+  margin:auto;
+  border-radius:50%;
+  background:var(--ink);
+  color:white;
+  font-family:'Space Mono';
+  font-size:13px;
+}
+
+.tool-card .icon{
+  display:block;
+  font-size:31px;
+  margin:7px 0 2px;
+}
+
+.tool-card .label{
+  font-family:'Baloo 2';
+  font-size:19px;
+  font-weight:800;
+}
+
+.tool-card[data-tool="advanced"].active{
+  background:var(--green);
+  color:white;
+}
+
+.tool-card[data-tool="mcqs"].active{
+  background:var(--purple);
+  color:white;
+}
+
+.tool-card[data-tool="brief"].active{
+  background:var(--blue);
+  color:white;
+}
+
+.result-wrap{
+  background:white;
+  border:3px solid var(--ink);
+  border-radius:18px;
+  padding:25px;
+  margin-top:20px;
+}
+
+.result-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+}
+
+.btn{
+  border:3px solid var(--ink);
+  border-radius:11px;
+  padding:9px 17px;
+  font-weight:800;
+  box-shadow:0 3px 0 var(--ink);
+}
+
+.btn:active{
+  transform:translateY(2px);
+  box-shadow:0 1px 0 var(--ink);
+}
+
+.pdf-btn{background:var(--coral)}
+.print-btn{
+  background:var(--blue);
+  color:white;
+}
+
+.loading{
+  text-align:center;
+  padding:50px 20px;
+}
+
+.spinner{
+  width:54px;
+  height:54px;
+  margin:auto auto 15px;
+  border:7px solid var(--paper2);
+  border-top-color:var(--coral);
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
+
+.note-title{
+  font-size:32px;
+  border-bottom:3px solid var(--yellow);
+  padding-bottom:10px;
+  margin-bottom:22px;
+}
+
+.note-section{margin-bottom:25px}
+
+.note-section h3{
+  color:var(--blueDark);
+  font-size:22px;
+  margin-bottom:8px;
+}
+
+.note-section li{margin-bottom:8px}
+
+.callout{
+  padding:14px;
+  margin:12px 0;
+  border-radius:11px;
+  border:2px solid #E0A000;
+  background:#FFF2D4;
+}
+
+.word-card{
+  background:var(--paper2);
+  border-left:5px solid var(--purple);
+  padding:11px 14px;
+  margin:8px 0;
+  border-radius:8px;
+}
+
+.word-card b{color:#7040D6}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:15px 0;
+  font-size:14px;
+}
+
+th{
+  background:var(--ink);
+  color:white;
+  padding:9px;
+  text-align:left;
+}
+
+td{
+  padding:9px;
+  border-bottom:1px solid var(--line);
+}
+
+tr:nth-child(even){background:var(--paper2)}
+
+.pic-flow{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:7px;
+  margin:10px 0 20px;
+}
+
+.pic-step{
+  background:var(--blue);
+  color:white;
+  padding:9px 12px;
+  border-radius:9px;
+  font-weight:800;
+  font-size:14px;
+}
+
+.pic-arrow{
+  color:var(--coral);
+  font-size:20px;
+  font-weight:900;
+}
+
+.quiz-progress{
+  font-family:'Space Mono';
+  font-size:12px;
+  color:var(--soft);
+  margin-bottom:10px;
+}
+
+.quiz-q{
+  font-size:20px;
+  font-weight:800;
+  margin-bottom:15px;
+}
+
+.quiz-opt{
+  display:block;
+  width:100%;
+  text-align:left;
+  border:2px solid var(--ink);
+  border-radius:10px;
+  background:var(--paper2);
+  padding:12px;
+  margin-bottom:9px;
+  font-size:15px;
+}
+
+.quiz-opt.correct{
+  background:var(--green);
+  color:white;
+}
+
+.quiz-opt.wrong{
+  background:var(--coral);
+  color:white;
+}
+
+.quiz-explain{
+  margin-top:10px;
+  background:var(--paper2);
+  padding:12px;
+  border-radius:10px;
+}
+
+.quiz-score{
+  text-align:center;
+  padding:30px;
+}
+
+.quiz-score .big{
+  font-family:'Baloo 2';
+  font-size:52px;
+  color:var(--coral);
+}
+
+footer{
+  text-align:center;
+  color:var(--soft);
+  font-family:'Space Mono';
+  font-size:11px;
+  padding:30px;
+}
+
+@media(max-width:760px){
+  .subject-grid{grid-template-columns:repeat(2,1fr)}
+  .tool-row{grid-template-columns:1fr}
+}
+
+@media(max-width:560px){
+  .subject-grid{grid-template-columns:1fr}
+
+  .panel,.result-wrap{padding:17px}
+
+  .cover{
+    padding:30px 15px 38px;
+  }
+
+  .char-count{
+    margin-left:0;
+    width:100%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="cover">
+
+  <div class="logo">📚 AI STUDY BUDDY</div>
+
+  <h1>RUHH <span>NOTES</span></h1>
+
+  <p>
+    Turn your study material into simple notes, MCQs and quick revision using Ruhh notes AI.
+  </p>
+
+</header>
+
+<div class="wrap">
+
+<section class="screen active" id="screenHome">
+
+  <div class="section-heading">
+    <h2>📂 Choose a Subject</h2>
+    <p>Select a subject to start studying.</p>
+  </div>
+
+  <div class="subject-grid">
+
+    <div class="subject-card science" data-subject="Science">
+      <span class="icon">🔬</span>
+      <span class="label">Science</span>
+    </div>
+
+    <div class="subject-card maths" data-subject="Maths">
+      <span class="icon">➗</span>
+      <span class="label">Maths</span>
+    </div>
+
+    <div class="subject-card social" data-subject="Social Studies">
+      <span class="icon">🌍</span>
+      <span class="label">Social Studies</span>
+    </div>
+
+    <div class="subject-card english" data-subject="English">
+      <span class="icon">📚</span>
+      <span class="label">English</span>
+    </div>
+
+    <div class="subject-card hindi" data-subject="Hindi">
+      <span class="icon">🇮🇳</span>
+      <span class="label">Hindi</span>
+    </div>
+
+    <div class="subject-card marathi" data-subject="Marathi">
+      <span class="icon">🪷</span>
+      <span class="label">Marathi</span>
+    </div>
+
+  </div>
+
+</section>
+
+<section class="screen" id="screenSubSub">
+
+  <div class="backbar">
+    <button class="back-btn" id="backFromSubSub">⬅ Back</button>
+    <span>Social Studies</span>
+  </div>
+
+  <div class="section-heading">
+    <h2>🌍 Social Studies</h2>
+    <p>Which part are you studying?</p>
+  </div>
+
+  <div class="subject-grid">
+
+    <div class="subject-card history" data-subsubject="History">
+      <span class="icon">📜</span>
+      <span class="label">History</span>
+    </div>
+
+    <div class="subject-card geography" data-subsubject="Geography">
+      <span class="icon">🗺️</span>
+      <span class="label">Geography</span>
+    </div>
+
+  </div>
+
+</section>
+
+<section class="screen" id="screenWorkspace">
+
+  <div class="backbar">
+    <button class="back-btn" id="backFromWorkspace">⬅ Back</button>
+    <span id="workspaceCrumb"></span>
+  </div>
+
+  <div class="panel">
+
+    <h2 id="workspaceTitle">📥 Add your study material</h2>
+
+    <p class="sub">
+      Paste your material or upload a TXT/PDF file.
+    </p>
+
+    <textarea
+      id="rawText"
+      placeholder="Paste your chapter, notes or study material here..."
+    ></textarea>
+
+    <div class="upload-row">
+
+      <label class="file-btn" for="fileInput">
+        📎 Upload .txt or .pdf
+      </label>
+
+      <input id="fileInput" type="file" accept=".txt,.pdf">
+
+      <span id="fileName"></span>
+
+      <span class="char-count" id="charCount">
+        0 characters
+      </span>
+
+    </div>
+
+    <div class="error" id="inputError" style="display:none;"></div>
+
+    <div class="tool-row">
+
+      <div class="tool-card" data-tool="advanced">
+        <span class="num">1</span>
+        <span class="icon">📝</span>
+        <span class="label">Advanced Notes</span>
+      </div>
+
+      <div class="tool-card" data-tool="mcqs">
+        <span class="num">2</span>
+        <span class="icon">🎯</span>
+        <span class="label">MCQs</span>
+      </div>
+
+      <div class="tool-card" data-tool="brief">
+        <span class="num">3</span>
+        <span class="icon">⚡</span>
+        <span class="label">Brief Overview</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="result-wrap" id="resultWrap" style="display:none;">
+
+    <div class="result-actions" id="resultActions"></div>
+
+    <div id="resultArea"></div>
+
+  </div>
+
+</section>
+
+<footer>
+  RUHH NOTES — Powered by Intelligence, no last-minute stress🎓
+</footer>
+
+</div>
+
+<script>
+
+/* ================================
+   STATE
+================================ */
+
+let navigation = {
+  subject:null,
+  subSubject:null
+};
+
+let results = {
+  advanced:null,
+  mcqs:null,
+  brief:null
+};
+
+let quiz = {
+  index:0,
+  score:0,
+  answered:false
+};
+
+
+/* ================================
+   HELPERS
+================================ */
+
+const $ = selector =>
+  document.querySelector(selector);
+
+const $$ = selector =>
+  Array.from(document.querySelectorAll(selector));
+
+
+function escapeHTML(value){
+
+  return String(value || "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+function formatText(value){
+
+  return escapeHTML(value)
+    .replace(
+      /\*\*(.*?)\*\*/g,
+      "<b>$1</b>"
+    );
+
+}
+
+
+function showScreen(id){
+
+  $$(".screen").forEach(screen =>
+    screen.classList.remove("active")
+  );
+
+  $("#" + id).classList.add("active");
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+function showError(message){
+
+  $("#inputError").textContent = message;
+  $("#inputError").style.display = "block";
+
+}
+
+
+/* ================================
+   NAVIGATION
+================================ */
+
+$$(".subject-card[data-subject]")
+.forEach(card => {
+
+  card.addEventListener("click",() => {
+
+    const subject =
+      card.dataset.subject;
+
+    if(subject === "Social Studies"){
+
+      navigation.subject = subject;
+      navigation.subSubject = null;
+
+      showScreen("screenSubSub");
+
+    }else{
+
+      enterWorkspace(subject,null);
+
+    }
+
+  });
+
+});
+
+
+$$(".subject-card[data-subsubject]")
+.forEach(card => {
+
+  card.addEventListener("click",() => {
+
+    enterWorkspace(
+      "Social Studies",
+      card.dataset.subsubject
+    );
+
+  });
+
+});
+
+
+$("#backFromSubSub")
+.addEventListener("click",() => {
+
+  showScreen("screenHome");
+
+});
+
+
+$("#backFromWorkspace")
+.addEventListener("click",() => {
+
+  if(navigation.subject === "Social Studies"){
+
+    showScreen("screenSubSub");
+
+  }else{
+
+    showScreen("screenHome");
+
+  }
+
+});
+
+
+function enterWorkspace(subject,subSubject){
+
+  navigation.subject = subject;
+  navigation.subSubject = subSubject;
+
+  results = {
+    advanced:null,
+    mcqs:null,
+    brief:null
+  };
+
+  $("#rawText").value = "";
+  $("#fileName").textContent = "";
+  $("#resultWrap").style.display = "none";
+  $("#inputError").style.display = "none";
+
+  $$(".tool-card").forEach(card =>
+    card.classList.remove("active")
+  );
+
+  updateCharCount();
+
+  const title =
+    subSubject
+      ? subject + " — " + subSubject
+      : subject;
+
+  $("#workspaceTitle").textContent =
+    "📥 " + title + ": Add your study material";
+
+  $("#workspaceCrumb").textContent = title;
+
+  showScreen("screenWorkspace");
+
+}
+
+
+/* ================================
+   TEXT
+================================ */
+
+$("#rawText")
+.addEventListener("input",updateCharCount);
+
+
+function updateCharCount(){
+
+  const count =
+    $("#rawText").value.length;
+
+  $("#charCount").textContent =
+    count.toLocaleString() +
+    " characters";
+
+}
+
+
+/* ================================
+   FILE UPLOAD
+================================ */
+
+$("#fileInput")
+.addEventListener("change",async event => {
+
+  const file =
+    event.target.files[0];
+
+  if(!file)return;
+
+  $("#fileName").textContent =
+    file.name;
+
+  try{
+
+    if(
+      file.name
+        .toLowerCase()
+        .endsWith(".pdf")
+    ){
+
+      const text =
+        await extractPDF(file);
+
+      $("#rawText").value = text;
+
+    }else{
+
+      $("#rawText").value =
+        await file.text();
+
+    }
+
+    updateCharCount();
+
+  }catch(error){
+
+    showError(
+      "I could not read this file. Please try another file or paste the text."
+    );
+
+  }
+
+});
+
+
+async function extractPDF(file){
+
+  pdfjsLib
+    .GlobalWorkerOptions
+    .workerSrc =
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+  const buffer =
+    await file.arrayBuffer();
+
+  const pdf =
+    await pdfjsLib
+      .getDocument({data:buffer})
+      .promise;
+
+  let fullText = "";
+
+  for(
+    let pageNumber=1;
+    pageNumber<=pdf.numPages;
+    pageNumber++
+  ){
+
+    const page =
+      await pdf.getPage(pageNumber);
+
+    const content =
+      await page.getTextContent();
+
+    fullText +=
+      content.items
+        .map(item => item.str)
+        .join(" ") +
+      "\n\n";
+
+  }
+
+  return fullText.trim();
+
+}
+
+
+/* ================================
+   GEMINI
+================================ */
+
+async function callGemini(tool,text){
+
+  const endpoints = {
+
+    advanced:"/api/advanced-notes",
+    mcqs:"/api/mcqs",
+    brief:"/api/overview"
+
+  };
+
+  const response =
+    await fetch(
+      endpoints[tool],
+      {
+        method:"POST",
+
+        headers:{
+          "Content-Type":
+            "application/json"
+        },
+
+        body:JSON.stringify({
+          text:text
+        })
+      }
+    );
+
+  const data =
+    await response.json();
+
+  if(!response.ok){
+
+    throw new Error(
+      data.error ||
+      "Gemini request failed."
+    );
+
+  }
+
+  return data;
+
+}
+
+
+/* ================================
+   TOOLS
+================================ */
+
+$$(".tool-card")
+.forEach(card => {
+
+  card.addEventListener("click",() => {
+
+    startTool(card.dataset.tool);
+
+  });
+
+});
+
+
+function startTool(tool){
+
+  const text =
+    $("#rawText")
+      .value
+      .trim();
+
+  $("#inputError")
+    .style.display = "none";
+
+  if(text.length < 40){
+
+    showError(
+      "Please paste or upload some study material first."
+    );
+
+    return;
+
+  }
+
+  $$(".tool-card").forEach(card => {
+
+    card.classList.toggle(
+      "active",
+      card.dataset.tool === tool
+    );
+
+  });
+
+  $("#resultWrap").style.display = "block";
+
+  generateTool(tool,text);
+
+}
+
+
+async function generateTool(tool,text){
+
+  const messages = {
+
+    advanced:
+      "🧠 Ruhaan is building your Advanced Notes...",
+
+    mcqs:
+      "🎯 Ruhaan is creating your MCQs...",
+
+    brief:
+      "⚡ Ruhaan is preparing your Brief Overview..."
+
+  };
+
+  $("#resultArea").innerHTML = `
+
+    <div class="loading">
+
+      <div class="spinner"></div>
+
+      <p>${messages[tool]}</p>
+
+    </div>
+
+  `;
+
+  $("#resultActions").innerHTML = "";
+
+  try{
+
+    const data =
+      await callGemini(tool,text);
+
+    results[tool] = {
+      data:data,
+      text:text
+    };
+
+    renderResult(tool);
+
+  }catch(error){
+
+    $("#resultArea").innerHTML = `
+
+      <div style="
+        text-align:center;
+        padding:30px;
+      ">
+
+        <h3>😕 Something went wrong</h3>
+
+        <p>${escapeHTML(error.message)}</p>
+
+        <button
+          class="btn pdf-btn"
+          id="retryButton">
+
+          🔁 Try Again
+
+        </button>
+
+      </div>
+
+    `;
+
+    $("#retryButton")
+      .addEventListener(
+        "click",
+        () => generateTool(tool,text)
+      );
+
+  }
+
+}
+
+
+/* ================================
+   RESULT ACTIONS
+================================ */
+
+function renderActions(tool){
+
+  $("#resultActions").innerHTML = `
+
+    <button
+      class="btn pdf-btn"
+      id="downloadPDF">
+
+      📥 Download PDF
+
+    </button>
+
+    <button
+      class="btn print-btn"
+      id="printButton">
+
+      🖨️ Print
+
+    </button>
+
+  `;
+
+
+  /*
+    IMPORTANT:
+    Download PDF now uses the browser's
+    own Print → Save as PDF system.
+    This avoids the blank-PDF problem.
+  */
+
+  $("#downloadPDF")
+    .addEventListener(
+      "click",
+      () => printResult()
+    );
+
+
+  $("#printButton")
+    .addEventListener(
+      "click",
+      () => printResult()
+    );
+
+}
+
+
+/* ================================
+   RESULT RENDERING
+================================ */
+
+function renderResult(tool){
+
+  if(tool === "advanced"){
+    renderAdvanced();
+  }
+
+  if(tool === "mcqs"){
+    renderMCQs();
+  }
+
+  if(tool === "brief"){
+    renderBrief();
+  }
+
+  renderActions(tool);
+
+}
+
+
+/* ================================
+   ADVANCED NOTES
+================================ */
+
+function renderAdvanced(){
+
+  const data =
+    results.advanced.data;
+
+  let html = `
+
+    <h2 class="note-title">
+
+      ${escapeHTML(
+        data.title ||
+        "Advanced Notes"
+      )}
+
+    </h2>
+
+  `;
+
+
+  (data.sections || [])
+  .forEach(section => {
+
+    html += `
+
+      <div class="note-section">
+
+        <h3>
+          ${escapeHTML(
+            section.heading || ""
+          )}
+        </h3>
+
+        <ul>
+
+    `;
+
+
+    (section.points || [])
+    .forEach(point => {
+
+      html += `
+
+        <li>
+          ${formatText(point)}
+        </li>
+
+      `;
+
+    });
+
+
+    html += `</ul>`;
+
+
+    if(
+      section.table &&
+      section.table.headers &&
+      section.table.rows
+    ){
+
+      html += `
+
+        <table>
+
+          <thead>
+            <tr>
+
+      `;
+
+      section.table.headers
+      .forEach(header => {
+
+        html += `
+          <th>
+            ${escapeHTML(header)}
+          </th>
+        `;
+
+      });
+
+      html += `
+            </tr>
+          </thead>
+
+          <tbody>
+      `;
+
+      section.table.rows
+      .forEach(row => {
+
+        html += "<tr>";
+
+        row.forEach(cell => {
+
+          html += `
+            <td>
+              ${escapeHTML(cell)}
+            </td>
+          `;
+
+        });
+
+        html += "</tr>";
+
+      });
+
+      html += `
+          </tbody>
+        </table>
+      `;
+
+    }
+
+
+    if(section.mnemonic){
+
+      html += `
+
+        <div class="callout">
+
+          🧠 <b>Memory Trick:</b>
+
+          ${escapeHTML(
+            section.mnemonic
+          )}
+
+        </div>
+
+      `;
+
+    }
+
+    html += `</div>`;
+
+  });
+
+
+  if(
+    data.difficultWords &&
+    data.difficultWords.length
+  ){
+
+    html += `
+
+      <div class="note-section">
+
+        <h3>
+          📖 Difficult Words & Meanings
+        </h3>
+
+    `;
+
+    data.difficultWords
+    .forEach(word => {
+
+      html += `
+
+        <div class="word-card">
+
+          <b>
+            ${escapeHTML(word.word)}
+          </b>
+
+          —
+          ${escapeHTML(word.meaning)}
+
+        </div>
+
+      `;
+
+    });
+
+    html += `</div>`;
+
+  }
+
+
+  if(
+    data.pictographicRevision &&
+    data.pictographicRevision.length
+  ){
+
+    html += `
+
+      <div class="note-section">
+
+        <h3>
+          🖼️ Pictographic Revision
+        </h3>
+
+    `;
+
+    data.pictographicRevision
+    .forEach(flow => {
+
+      html += `
+
+        <h4>
+          ${escapeHTML(flow.title)}
+        </h4>
+
+        <div class="pic-flow">
+
+      `;
+
+      (flow.steps || [])
+      .forEach((step,index) => {
+
+        html += `
+
+          <div class="pic-step">
+            ${escapeHTML(step)}
+          </div>
+
+        `;
+
+        if(
+          index <
+          flow.steps.length - 1
+        ){
+
+          html += `
+            <span class="pic-arrow">
+              →
+            </span>
+          `;
+
+        }
+
+      });
+
+      html += `
+        </div>
+      `;
+
+    });
+
+    html += `</div>`;
+
+  }
+
+
+  $("#resultArea").innerHTML =
+    html;
+
+}
+
+
+/* ================================
+   MCQs
+================================ */
+
+function renderMCQs(){
+
+  quiz = {
+    index:0,
+    score:0,
+    answered:false
+  };
+
+  drawQuestion();
+
+}
+
+
+function drawQuestion(){
+
+  const questions =
+    results.mcqs.data.items || [];
+
+  if(
+    quiz.index >= questions.length
+  ){
+
+    $("#resultArea").innerHTML = `
+
+      <div class="quiz-score">
+
+        <div class="big">
+          ${quiz.score}/${questions.length}
+        </div>
+
+        <h3>Quiz Complete 🎉</h3>
+
+        <p>
+          You scored ${quiz.score}
+          out of ${questions.length}.
+        </p>
+
+        <button
+          class="btn pdf-btn"
+          onclick="restartQuiz()">
+
+          🔁 Retry Quiz
+
+        </button>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  const question =
+    questions[quiz.index];
+
+  let html = `
+
+    <div class="quiz-progress">
+
+      Question
+      ${quiz.index + 1}
+      of
+      ${questions.length}
+
+      · Score:
+      ${quiz.score}
+
+    </div>
+
+    <div class="quiz-q">
+
+      ${escapeHTML(
+        question.question
+      )}
+
+    </div>
+
+  `;
+
+
+  (question.options || [])
+  .forEach((option,index) => {
+
+    html += `
+
+      <button
+        class="quiz-opt"
+        data-index="${index}">
+
+        ${escapeHTML(option)}
+
+      </button>
+
+    `;
+
+  });
+
+
+  html += `
+
+    <div id="quizExplanation"></div>
+
+    <button
+      class="btn print-btn"
+      id="nextQuestion"
+      style="
+        display:none;
+        margin-top:15px;
+      ">
+
+      Next Question ➡
+
+    </button>
+
+  `;
+
+
+  $("#resultArea").innerHTML =
+    html;
+
+
+  $$(".quiz-opt")
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        if(quiz.answered)return;
+
+        quiz.answered = true;
+
+        const selected =
+          Number(button.dataset.index);
+
+        const correct =
+          (question.options || [])
+            .findIndex(
+              option =>
+                option ===
+                question.answer
+            );
+
+
+        $$(".quiz-opt")
+        .forEach((btn,index) => {
+
+          if(index === correct){
+
+            btn.classList.add(
+              "correct"
+            );
+
+          }
+
+          if(
+            index === selected &&
+            index !== correct
+          ){
+
+            btn.classList.add(
+              "wrong"
+            );
+
+          }
+
+        });
+
+
+        if(selected === correct){
+          quiz.score++;
+        }
+
+
+        if(question.explanation){
+
+          $("#quizExplanation")
+            .innerHTML = `
+
+              <div class="quiz-explain">
+
+                💡
+                ${escapeHTML(
+                  question.explanation
+                )}
+
+              </div>
+
+            `;
+
+        }
+
+
+        $("#nextQuestion")
+          .style.display =
+          "inline-block";
+
+      }
+    );
+
+  });
+
+
+  $("#nextQuestion")
+    .addEventListener(
+      "click",
+      () => {
+
+        quiz.index++;
+        quiz.answered = false;
+
+        drawQuestion();
+
+      }
+    );
+
+}
+
+
+function restartQuiz(){
+
+  quiz = {
+    index:0,
+    score:0,
+    answered:false
+  };
+
+  drawQuestion();
+
+}
+
+
+/* ================================
+   BRIEF OVERVIEW
+================================ */
+
+function renderBrief(){
+
+  const data =
+    results.brief.data;
+
+  let html = `
+
+    <h2 class="note-title">
+
+      ${escapeHTML(
+        data.title ||
+        "Brief Overview"
+      )}
+
+    </h2>
+
+    <ul>
+
+  `;
+
+
+  (data.points || [])
+  .forEach(point => {
+
+    html += `
+
+      <li>
+        ${formatText(point)}
+      </li>
+
+    `;
+
+  });
+
+
+  html += `</ul>`;
+
+  $("#resultArea").innerHTML =
+    html;
+
+}
+
+
+/* ================================
+   PRINT / SAVE AS PDF
+================================ */
+
+function printResult(){
+
+  const content =
+    $("#resultArea").innerHTML;
+
+  const title =
+    navigation.subSubject
+      ? "RUHH NOTES — " +
+        navigation.subject +
+        " — " +
+        navigation.subSubject
+      : "RUHH NOTES — " +
+        navigation.subject;
+
+
+  const printWindow =
+    window.open(
+      "",
+      "_blank"
+    );
+
+
+  if(!printWindow){
+
+    alert(
+      "Please allow pop-ups for RUHH NOTES."
+    );
+
+    return;
+
+  }
+
+
+  printWindow.document.open();
+
+
+  printWindow.document.write(`
+
+    <!DOCTYPE html>
+
+    <html>
+
+    <head>
+
+      <title>
+        ${escapeHTML(title)}
+      </title>
+
+      <style>
+
+        @page{
+          size:A4;
+          margin:16mm;
+        }
+
+        *{
+          box-sizing:border-box;
+        }
+
+        body{
+          font-family:Arial,sans-serif;
+          color:#242046;
+          line-height:1.55;
+          font-size:14px;
+          background:white;
+        }
+
+        .header{
+          background:#242046;
+          color:white;
+          padding:18px;
+          border-radius:12px;
+          margin-bottom:22px;
+        }
+
+        .brand{
+          color:#FFC93C;
+          font-size:12px;
+          font-weight:bold;
+          letter-spacing:1px;
+        }
+
+        h1{
+          margin:5px 0 0;
+          font-size:25px;
+        }
+
+        h2{
+          font-size:22px;
+          border-bottom:3px solid #FFC93C;
+          padding-bottom:7px;
+          margin-top:22px;
+        }
+
+        h3{
+          color:#2C6FE0;
+          font-size:18px;
+          margin-top:20px;
+        }
+
+        ul{
+          padding-left:25px;
+        }
+
+        li{
+          margin-bottom:7px;
+        }
+
+        table{
+          width:100%;
+          border-collapse:collapse;
+          margin:15px 0;
+          page-break-inside:auto;
+        }
+
+        tr{
+          page-break-inside:avoid;
+          page-break-after:auto;
+        }
+
+        th{
+          background:#242046;
+          color:white;
+          padding:8px;
+          text-align:left;
+        }
+
+        td{
+          padding:8px;
+          border:1px solid #ddd;
+        }
+
+        .callout{
+          background:#FFF2D4;
+          border:1px solid #E0A000;
+          border-radius:8px;
+          padding:10px;
+          margin:12px 0;
+        }
+
+        .word{
+          background:#FCF2DA;
+          padding:8px 10px;
+          margin:7px 0;
+          border-left:4px solid #9B6BFF;
+        }
+
+        .flow{
+          margin:10px 0;
+          font-weight:bold;
+        }
+
+        .footer{
+          margin-top:30px;
+          text-align:center;
+          color:#777;
+          font-size:10px;
+        }
+
+        .quiz-question{
+          margin-bottom:20px;
+          page-break-inside:avoid;
+        }
+
+        @media print{
+
+          .no-print{
+            display:none;
+          }
+
+        }
+
+      </style>
+
+    </head>
+
+    <body>
+
+      <div class="header">
+
+        <div class="brand">
+          📚 RUHH NOTES
+        </div>
+
+        <h1>
+          ${escapeHTML(title)}
+        </h1>
+
+      </div>
+
+      ${content}
+
+      <div class="footer">
+        RUHH NOTES — AI Study Notes
+      </div>
+
+    </body>
+
+    </html>
+
+  `);
+
+
+  printWindow.document.close();
+
+
+  /*
+    Wait for the new window to finish loading,
+    then open Chrome's print dialog.
+  */
+
+  setTimeout(() => {
+
+    printWindow.focus();
+
+    printWindow.print();
+
+  },700);
+
+}
+
+</script>
+
+</body>
+</html>
