@@ -690,9 +690,34 @@ footer{
   loop>
 </audio>
 
+<!-- GENERAL MUSIC: all sections except Primula -->
+<audio
+  id="generalMusic"
+  src="General-Music.mp3"
+  preload="auto"
+  loop>
+</audio>
+
 <header class="cover">
 
   <div class="logo">📚 AI STUDY BUDDY</div>
+
+  <button
+    id="musicToggle"
+    type="button"
+    style="
+      margin-top:14px;
+      border:1px solid #FFFFFF30;
+      border-radius:999px;
+      padding:9px 17px;
+      background:#43D9FF18;
+      color:#F7F8FF;
+      font-weight:800;
+      cursor:pointer;
+      box-shadow:0 8px 20px #0004;
+    ">
+    🎵 Music: ON
+  </button>
 
   <h1>RUHH <span>NOTES</span></h1>
 
@@ -1012,7 +1037,11 @@ function showError(message){
 
 $("#projectHelpCard")
 .addEventListener("click",() => {
+
+  playGeneralMusic();
+
   showScreen("screenProject");
+
 });
 
 $("#backFromProject")
@@ -1099,6 +1128,141 @@ $("#projectChecklist").addEventListener("click",() => {
 
 
 /* ================================
+   MUSIC ON / OFF
+================================ */
+
+let musicEnabled =
+  localStorage.getItem("ruhhMusicEnabled") !== "false";
+
+const musicToggle =
+  document.getElementById("musicToggle");
+
+function updateMusicToggle(){
+
+  musicToggle.textContent =
+    musicEnabled
+      ? "🎵 Music: ON"
+      : "🔇 Music: OFF";
+
+  musicToggle.style.background =
+    musicEnabled
+      ? "#43D9FF18"
+      : "#FFFFFF10";
+
+}
+
+musicToggle.addEventListener("click",() => {
+
+  musicEnabled = !musicEnabled;
+
+  localStorage.setItem(
+    "ruhhMusicEnabled",
+    String(musicEnabled)
+  );
+
+  if(!musicEnabled){
+
+    stopAllMusic();
+
+  }
+
+  updateMusicToggle();
+
+});
+
+updateMusicToggle();
+
+
+/* ================================
+   WEBSITE MUSIC
+   Primula = Thumak Thumak
+   Everything else = General-Music
+================================ */
+
+function stopAllMusic(){
+
+  const primula =
+    document.getElementById("primulaMusic");
+
+  const general =
+    document.getElementById("generalMusic");
+
+  if(primula){
+    primula.pause();
+    primula.currentTime = 0;
+  }
+
+  if(general){
+    general.pause();
+    general.currentTime = 0;
+  }
+
+}
+
+function playGeneralMusic(){
+
+  if(!musicEnabled){
+
+    stopAllMusic();
+    return;
+
+  }
+
+  const primula =
+    document.getElementById("primulaMusic");
+
+  const general =
+    document.getElementById("generalMusic");
+
+  if(primula){
+    primula.pause();
+    primula.currentTime = 0;
+  }
+
+  if(general){
+
+    general.volume = 0.55;
+    general.currentTime = 0;
+
+    general.play().catch(() => {});
+
+  }
+
+}
+
+function playPrimulaMusic(){
+
+  if(!musicEnabled){
+
+    stopAllMusic();
+    return;
+
+  }
+
+  const general =
+    document.getElementById("generalMusic");
+
+  const primula =
+    document.getElementById("primulaMusic");
+
+  if(general){
+    general.pause();
+    general.currentTime = 0;
+  }
+
+  if(primula){
+
+    primula.volume = 0.55;
+    primula.currentTime = 0;
+
+    primula.play().catch(() => {});
+
+  }
+
+}
+
+
+/* ================================
    MAIN SUBJECT NAVIGATION
 ================================ */
 
@@ -1109,6 +1273,10 @@ $$(".subject-card[data-subject]")
 
     const subject =
       card.dataset.subject;
+
+    // Every main subject uses General-Music.
+    // Primula is handled separately below.
+    playGeneralMusic();
 
     if(subject === "Social Studies"){
 
@@ -1139,6 +1307,9 @@ $$(".subject-card[data-subsubject]")
 
     const subSubject =
       card.dataset.subsubject;
+
+    // History and Geography use General-Music.
+    playGeneralMusic();
 
     if(subSubject === "Geography"){
 
@@ -1178,24 +1349,15 @@ $$(".subject-card[data-geooption]")
       "Geography — " + option
     );
 
-    const music =
-      document.getElementById("primulaMusic");
+    if(option === "Primula"){
 
-    if(music){
+      // Primula keeps its special Thumak Thumak music.
+      playPrimulaMusic();
 
-      if(option === "Primula"){
+    }else{
 
-        music.volume = 0.55;
-        music.currentTime = 0;
-
-        music.play().catch(() => {});
-
-      }else{
-
-        music.pause();
-        music.currentTime = 0;
-
-      }
+      // Aishwarya and Student use the general music.
+      playGeneralMusic();
 
     }
 
@@ -1223,15 +1385,8 @@ $("#backFromGeographyOptions")
 $("#backFromWorkspace")
 .addEventListener("click",() => {
 
-  const music =
-    document.getElementById("primulaMusic");
-
-  if(music){
-
-    music.pause();
-    music.currentTime = 0;
-
-  }
+  // Stop whichever soundtrack is currently playing.
+  stopAllMusic();
 
   if(
     navigation.subject === "Social Studies" &&
