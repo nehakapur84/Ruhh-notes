@@ -702,22 +702,31 @@ footer{
 
   <div class="logo">📚 AI STUDY BUDDY</div>
 
-  <button
-    id="musicToggle"
-    type="button"
-    style="
+  <div style="
       margin-top:14px;
-      border:1px solid #FFFFFF30;
-      border-radius:999px;
-      padding:9px 17px;
-      background:#43D9FF18;
-      color:#F7F8FF;
-      font-weight:800;
-      cursor:pointer;
-      box-shadow:0 8px 20px #0004;
+      display:flex;
+      justify-content:center;
+      gap:8px;
+      flex-wrap:wrap;
     ">
-    🎵 Music: ON
-  </button>
+
+    <button
+      id="musicToggle"
+      type="button"
+      style="
+        border:1px solid #FFFFFF30;
+        border-radius:999px;
+        padding:9px 17px;
+        background:#43D9FF18;
+        color:#F7F8FF;
+        font-weight:800;
+        cursor:pointer;
+        box-shadow:0 8px 20px #0004;
+      ">
+      🎵 Music: ON
+    </button>
+
+  </div>
 
   <h1>RUHH <span>NOTES</span></h1>
 
@@ -1131,8 +1140,12 @@ $("#projectChecklist").addEventListener("click",() => {
    MUSIC ON / OFF
 ================================ */
 
-let musicEnabled =
-  localStorage.getItem("ruhhMusicEnabled") !== "false";
+let musicEnabled = false;
+
+localStorage.setItem(
+  "ruhhMusicEnabled",
+  "false"
+);
 
 const musicToggle =
   document.getElementById("musicToggle");
@@ -1151,22 +1164,50 @@ function updateMusicToggle(){
 
 }
 
-musicToggle.addEventListener("click",() => {
-
-  musicEnabled = !musicEnabled;
-
-  localStorage.setItem(
-    "ruhhMusicEnabled",
-    String(musicEnabled)
-  );
+musicToggle.addEventListener("click", async () => {
 
   if(!musicEnabled){
 
+    musicEnabled = true;
+
+    localStorage.setItem(
+      "ruhhMusicEnabled",
+      "true"
+    );
+
+    updateMusicToggle();
+
     stopAllMusic();
 
-  }
+    generalMusic.volume = 0.55;
 
-  updateMusicToggle();
+    try{
+
+      await generalMusic.play();
+
+    }catch(error){
+
+      console.error(
+        "General music could not start:",
+        error
+      );
+
+    }
+
+  }else{
+
+    musicEnabled = false;
+
+    localStorage.setItem(
+      "ruhhMusicEnabled",
+      "false"
+    );
+
+    stopAllMusic();
+
+    updateMusicToggle();
+
+  }
 
 });
 
