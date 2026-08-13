@@ -582,6 +582,72 @@ footer{
   background:#43D9FF0D;
 }
 
+
+/* ================================
+   PROJECT HELP
+================================ */
+.project-card{
+  grid-column:1 / -1;
+  background:linear-gradient(135deg,#173B52,#242046 55%,#39204A);
+  border:1px solid #43D9FF55;
+}
+.project-card .icon{font-size:48px}
+.project-card:hover{
+  border-color:#43D9FF99;
+  box-shadow:0 18px 50px #43D9FF12,0 18px 45px #0007;
+}
+
+.project-actions{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  margin-top:18px;
+}
+.project-action{
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:#FFFFFF08;
+  color:#F7F8FF;
+  padding:17px 12px;
+  text-align:center;
+  font-weight:800;
+  transition:.18s;
+}
+.project-action:hover{
+  transform:translateY(-3px);
+  border-color:#43D9FF66;
+}
+.project-action .icon{
+  display:block;
+  font-size:28px;
+  margin-bottom:4px;
+}
+.project-output{
+  margin-top:20px;
+  padding:22px;
+  background:#FFFFFF07;
+  border:1px solid var(--line);
+  border-radius:18px;
+}
+.project-output h3{
+  color:var(--blue);
+  margin-bottom:8px;
+}
+.project-output li{
+  margin-bottom:8px;
+}
+.project-tip{
+  padding:13px 15px;
+  margin-top:14px;
+  border-radius:11px;
+  background:#FFD45C12;
+  border:1px solid #FFD45C44;
+  color:#F8E8A8;
+}
+@media(max-width:760px){
+  .project-actions{grid-template-columns:1fr}
+}
+
 @media(max-width:760px){
   .subject-grid{
     grid-template-columns:repeat(2,1fr);
@@ -677,6 +743,56 @@ footer{
       <span class="label">Marathi</span>
     </div>
 
+    <div class="subject-card project-card" id="projectHelpCard">
+      <span class="icon">🛠️</span>
+      <span class="label">Help with Project</span>
+    </div>
+
+  </div>
+
+</section>
+
+
+<section class="screen" id="screenProject">
+
+  <div class="backbar">
+    <button class="back-btn" id="backFromProject">⬅ Back</button>
+    <span>Help with Project</span>
+  </div>
+
+  <div class="section-heading">
+    <h2>🛠️ Help with Project</h2>
+    <p>Plan your project, organise your ideas and finish it confidently.</p>
+  </div>
+
+  <div class="panel">
+    <h2>🚀 Let's build your project</h2>
+    <p class="sub">Tell RUHH NOTES a little about your project.</p>
+
+    <textarea id="projectTopic"
+      style="min-height:120px"
+      placeholder="Example: Hydrosphere — Grade 9 Geography project"></textarea>
+
+    <textarea id="projectInstructions"
+      style="min-height:150px"
+      placeholder="Paste your teacher's instructions, rubric or project requirements here..."></textarea>
+
+    <div class="project-actions">
+      <button class="project-action" id="projectIdeas">
+        <span class="icon">💡</span>
+        Project Ideas
+      </button>
+      <button class="project-action" id="projectPlan">
+        <span class="icon">🧩</span>
+        Make My Plan
+      </button>
+      <button class="project-action" id="projectChecklist">
+        <span class="icon">✅</span>
+        Final Checklist
+      </button>
+    </div>
+
+    <div class="project-output" id="projectOutput" style="display:none;"></div>
   </div>
 
 </section>
@@ -887,6 +1003,99 @@ function showError(message){
   $("#inputError").style.display = "block";
 
 }
+
+
+
+/* ================================
+   PROJECT HELP
+================================ */
+
+$("#projectHelpCard")
+.addEventListener("click",() => {
+  showScreen("screenProject");
+});
+
+$("#backFromProject")
+.addEventListener("click",() => {
+  showScreen("screenHome");
+});
+
+function projectInfo(){
+  return {
+    topic: $("#projectTopic").value.trim(),
+    instructions: $("#projectInstructions").value.trim()
+  };
+}
+
+function showProject(title, items, tip){
+  const data=projectInfo();
+  if(!data.topic){
+    $("#projectOutput").style.display="block";
+    $("#projectOutput").innerHTML=`
+      <h3>✏️ First tell me your project topic</h3>
+      <p>For example: <b>Hydrosphere</b>, <b>Harappan Civilization</b>, or <b>Climate Change</b>.</p>
+    `;
+    return;
+  }
+
+  $("#projectOutput").style.display="block";
+  $("#projectOutput").innerHTML=`
+    <h3>${title}</h3>
+    <p><b>Project:</b> ${escapeHTML(data.topic)}</p>
+    <ul>
+      ${items.map(x=>`<li>${escapeHTML(x)}</li>`).join("")}
+    </ul>
+    <div class="project-tip">💡 ${escapeHTML(tip)}</div>
+  `;
+}
+
+$("#projectIdeas").addEventListener("click",() => {
+  showProject(
+    "💡 Creative Ideas",
+    [
+      "Start with an attractive cover page and a clear title.",
+      "Break the topic into 4–6 logical sections instead of writing one long block.",
+      "Add one labelled diagram, map, flowchart or timeline wherever it genuinely helps.",
+      "Include a small 'Did You Know?' or 'Fun Fact' box.",
+      "Finish with a conclusion and a short bibliography/source section."
+    ],
+    "Use your teacher's instructions as the priority. Creativity should improve the project, not replace the required content."
+  );
+});
+
+$("#projectPlan").addEventListener("click",() => {
+  showProject(
+    "🧩 Project Plan",
+    [
+      "1. Understand the topic and teacher requirements.",
+      "2. Collect the key facts and organise them under headings.",
+      "3. Decide the page/section order before decorating.",
+      "4. Add diagrams, maps, pictures or activities only where relevant.",
+      "5. Write the introduction, main content and conclusion.",
+      "6. Add acknowledgement/bibliography if required.",
+      "7. Proofread spelling, headings, labels and page numbers."
+    ],
+    "Do the content first and decoration second. A neat project with clear explanations usually looks stronger than a heavily decorated project with weak content."
+  );
+});
+
+$("#projectChecklist").addEventListener("click",() => {
+  showProject(
+    "✅ Final Checklist",
+    [
+      "My name, grade, division, roll number and subject are included if required.",
+      "The cover page is complete and neat.",
+      "Every required section from the instructions is included.",
+      "Facts, spellings and diagrams have been checked.",
+      "All diagrams/maps have labels.",
+      "Pages are numbered and arranged correctly.",
+      "The conclusion is included.",
+      "Sources/bibliography are included if required.",
+      "The project is ready to submit."
+    ],
+    "Before submitting, read the project once from beginning to end as if you were the teacher checking it."
+  );
+});
 
 
 /* ================================
