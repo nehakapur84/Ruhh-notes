@@ -75,6 +75,7 @@ h1,h2,h3,h4{
   position:relative;
   overflow:hidden;
 }
+
 .cover:before{
   content:"";
   position:absolute;
@@ -84,6 +85,7 @@ h1,h2,h3,h4{
   background:#43D9FF22;
   filter:blur(4px);
 }
+
 .cover:after{
   content:"";
   position:absolute;
@@ -92,7 +94,11 @@ h1,h2,h3,h4{
   border-radius:50%;
   background:#8D7DFF25;
 }
-.cover > *{position:relative;z-index:1}
+
+.cover > *{
+  position:relative;
+  z-index:1;
+}
 
 .logo{
   display:inline-block;
@@ -126,7 +132,10 @@ h1,h2,h3,h4{
   margin-bottom:25px;
 }
 
-.section-heading h2{font-size:32px;color:#F7F8FF}
+.section-heading h2{
+  font-size:32px;
+  color:#F7F8FF;
+}
 
 .section-heading p{
   margin-top:4px;
@@ -157,7 +166,9 @@ h1,h2,h3,h4{
   box-shadow:0 18px 45px #0007,0 0 24px #43D9FF10;
 }
 
-.subject-card:active{transform:translateY(-1px)}
+.subject-card:active{
+  transform:translateY(-1px);
+}
 
 .subject-card .icon{
   display:block;
@@ -181,7 +192,6 @@ h1,h2,h3,h4{
 .history{background:#20183B}
 .geography{background:#0E2930}
 
-/* NEW GEOGRAPHY OPTIONS */
 .aishwarya{background:#321B29}
 .primula{background:#102D26}
 .student{background:#302719}
@@ -227,7 +237,6 @@ textarea{
   border-radius:13px;
   background:#070B16;
   color:#F7F8FF;
-  border-color:var(--line);
   font-size:16px;
   resize:vertical;
 }
@@ -368,9 +377,11 @@ textarea:focus{
   color:#F7F8FF;
 }
 
-.btn:active{transform:translateY(1px)}
-
-.pdf-btn{background:linear-gradient(135deg,#FF6FAE,#E9568E);color:#210A15;border:0}
+.pdf-btn{
+  background:linear-gradient(135deg,#FF6FAE,#E9568E);
+  color:#210A15;
+  border:0;
+}
 
 .print-btn{
   background:linear-gradient(135deg,#159BC1,#43D9FF);
@@ -381,7 +392,6 @@ textarea:focus{
 .loading{
   text-align:center;
   padding:50px 20px;
-  color:var(--muted);
 }
 
 .spinner{
@@ -404,10 +414,11 @@ textarea:focus{
   border-bottom:3px solid var(--blue);
   padding-bottom:10px;
   margin-bottom:22px;
-  color:#F7F8FF;
 }
 
-.note-section{margin-bottom:25px}
+.note-section{
+  margin-bottom:25px;
+}
 
 .note-section h3{
   color:var(--blue);
@@ -415,7 +426,9 @@ textarea:focus{
   margin-bottom:8px;
 }
 
-.note-section li{margin-bottom:8px}
+.note-section li{
+  margin-bottom:8px;
+}
 
 .callout{
   padding:14px;
@@ -434,7 +447,9 @@ textarea:focus{
   border-radius:8px;
 }
 
-.word-card b{color:#B9ADFF}
+.word-card b{
+  color:#B9ADFF;
+}
 
 table{
   width:100%;
@@ -455,7 +470,9 @@ td{
   border-bottom:1px solid var(--line);
 }
 
-tr:nth-child(even){background:#FFFFFF06}
+tr:nth-child(even){
+  background:#FFFFFF06;
+}
 
 .pic-flow{
   display:flex;
@@ -543,8 +560,6 @@ footer{
   padding:30px;
 }
 
-
-/* Blue/Cyan RUHH NOTES theme overrides */
 .section-heading h2,
 .panel h2,
 .result-wrap h2,
@@ -552,20 +567,40 @@ footer{
 .note-section h4{
   color:#F7F8FF;
 }
-.backbar span{color:#9DA9C8}
-.panel .sub{color:#9DA9C8}
-.file-btn:hover,.back-btn:hover{border-color:#43D9FF66;background:#43D9FF0D}
-.quiz-progress{color:#9DA9C8}
+
+.backbar span{
+  color:#9DA9C8;
+}
+
+.panel .sub{
+  color:#9DA9C8;
+}
+
+.file-btn:hover,
+.back-btn:hover{
+  border-color:#43D9FF66;
+  background:#43D9FF0D;
+}
 
 @media(max-width:760px){
-  .subject-grid{grid-template-columns:repeat(2,1fr)}
-  .tool-row{grid-template-columns:1fr}
+  .subject-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .tool-row{
+    grid-template-columns:1fr;
+  }
 }
 
 @media(max-width:560px){
-  .subject-grid{grid-template-columns:1fr}
+  .subject-grid{
+    grid-template-columns:1fr;
+  }
 
-  .panel,.result-wrap{padding:17px}
+  .panel,
+  .result-wrap{
+    padding:17px;
+  }
 
   .cover{
     padding:30px 15px 38px;
@@ -580,6 +615,14 @@ footer{
 </head>
 
 <body>
+
+<!-- MUSIC FOR PRIMULA -->
+<audio
+  id="primulaMusic"
+  src="Thumak Thumak.mp3"
+  preload="auto"
+  loop>
+</audio>
 
 <header class="cover">
 
@@ -666,8 +709,6 @@ footer{
 
 </section>
 
-<!-- NEW GEOGRAPHY OPTIONS SCREEN -->
-
 <section class="screen" id="screenGeographyOptions">
 
   <div class="backbar">
@@ -683,12 +724,12 @@ footer{
   <div class="subject-grid">
 
     <div class="subject-card aishwarya" data-geooption="Aishwarya">
-      <span class="icon">🌸</span>
+      <span class="icon">✨</span>
       <span class="label">Aishwarya</span>
     </div>
 
     <div class="subject-card primula" data-geooption="Primula">
-      <span class="icon">🌿</span>
+      <span class="icon">🌸</span>
       <span class="label">Primula</span>
     </div>
 
@@ -912,7 +953,7 @@ $$(".subject-card[data-subsubject]")
 
 
 /* ================================
-   NEW GEOGRAPHY OPTIONS
+   GEOGRAPHY OPTIONS
 ================================ */
 
 $$(".subject-card[data-geooption]")
@@ -920,11 +961,34 @@ $$(".subject-card[data-geooption]")
 
   card.addEventListener("click",() => {
 
+    const option =
+      card.dataset.geooption;
+
     enterWorkspace(
       "Social Studies",
-      "Geography — " +
-      card.dataset.geooption
+      "Geography — " + option
     );
+
+    const music =
+      document.getElementById("primulaMusic");
+
+    if(music){
+
+      if(option === "Primula"){
+
+        music.volume = 0.55;
+        music.currentTime = 0;
+
+        music.play().catch(() => {});
+
+      }else{
+
+        music.pause();
+        music.currentTime = 0;
+
+      }
+
+    }
 
   });
 
@@ -949,6 +1013,16 @@ $("#backFromGeographyOptions")
 
 $("#backFromWorkspace")
 .addEventListener("click",() => {
+
+  const music =
+    document.getElementById("primulaMusic");
+
+  if(music){
+
+    music.pause();
+    music.currentTime = 0;
+
+  }
 
   if(
     navigation.subject === "Social Studies" &&
